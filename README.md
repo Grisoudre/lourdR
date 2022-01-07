@@ -17,18 +17,13 @@ devtools::install_github("Grisoudre/lourdR")
 
 # Exemples
 
-``` r
-library(lourdR)
-library(questionr)
-library(dplyr)
-```
-
 ## Données
 
 A partir des données extraites de l’enquête “Histoire de vie”, 2003,
 Insee, et fournies par le package {questionr} :
 
 ``` r
+library(lourdR)
 data("hdv2003")
 # Renommer les variables cibles avec le préfixe "activite_" :
 index<-match("hard.rock", names(hdv2003)):match("sport", names(hdv2003))
@@ -61,27 +56,52 @@ freqm(hdv2003, "activite_")
 #> 14 activite_sport        n     1277   723    2000
 ```
 
+### En réordonnant les colonnes à l’aide des facteurs
+
+``` r
+ordre <- c("Oui","Non")
+hdv2003 <- hdv2003 %>% mutate(across(matches("^activite_"), ~factor(., levels = ordre)))
+freqm(hdv2003, "activite_")
+#> # A tibble: 14 × 5
+#>    name                  calc    Oui    Non Total
+#>    <chr>                 <chr> <dbl>  <dbl> <dbl>
+#>  1 activite_bricol       %      42.6   57.4   100
+#>  2 activite_bricol       n     853   1147    2000
+#>  3 activite_cinema       %      41.3   58.7   100
+#>  4 activite_cinema       n     826   1174    2000
+#>  5 activite_cuisine      %      44     56     100
+#>  6 activite_cuisine      n     881   1119    2000
+#>  7 activite_hard.rock    %       0.7   99.3   100
+#>  8 activite_hard.rock    n      14   1986    2000
+#>  9 activite_lecture.bd   %       2.4   97.7   100
+#> 10 activite_lecture.bd   n      47   1953    2000
+#> 11 activite_peche.chasse %      11.2   88.8   100
+#> 12 activite_peche.chasse n     224   1776    2000
+#> 13 activite_sport        %      36.1   63.8   100
+#> 14 activite_sport        n     723   1277    2000
+```
+
 ### Pondérés
 
 ``` r
 freqm(hdv2003, "activite_", poids = "poids")
 #> # A tibble: 14 × 5
-#>    name                  calc         Non       Oui    Total
-#>    <chr>                 <chr>      <dbl>     <dbl>    <dbl>
-#>  1 activite_bricol       %           59.1      40.9      100
-#>  2 activite_bricol       n      6544105   4527121   11071226
-#>  3 activite_cinema       %           55.5      44.5      100
-#>  4 activite_cinema       n      6146151   4925076   11071227
-#>  5 activite_cuisine      %           57.4      42.6      100
-#>  6 activite_cuisine      n      6356851   4714376   11071227
-#>  7 activite_hard.rock    %           99.2       0.8      100
-#>  8 activite_hard.rock    n     10981963     89264   11071227
-#>  9 activite_lecture.bd   %           97.5       2.5      100
-#> 10 activite_lecture.bd   n     10797021    274205   11071226
-#> 11 activite_peche.chasse %           87.8      12.2      100
-#> 12 activite_peche.chasse n      9716683   1354544   11071227
-#> 13 activite_sport        %           60.7      39.3      100
-#> 14 activite_sport        n      6714760   4356466   11071226
+#>    name                  calc        Oui        Non    Total
+#>    <chr>                 <chr>     <dbl>      <dbl>    <dbl>
+#>  1 activite_bricol       %          40.9       59.1      100
+#>  2 activite_bricol       n     4527121    6544105   11071226
+#>  3 activite_cinema       %          44.5       55.5      100
+#>  4 activite_cinema       n     4925076    6146151   11071227
+#>  5 activite_cuisine      %          42.6       57.4      100
+#>  6 activite_cuisine      n     4714376    6356851   11071227
+#>  7 activite_hard.rock    %           0.8       99.2      100
+#>  8 activite_hard.rock    n       89264   10981963   11071227
+#>  9 activite_lecture.bd   %           2.5       97.5      100
+#> 10 activite_lecture.bd   n      274205   10797021   11071226
+#> 11 activite_peche.chasse %          12.2       87.8      100
+#> 12 activite_peche.chasse n     1354544    9716683   11071227
+#> 13 activite_sport        %          39.3       60.7      100
+#> 14 activite_sport        n     4356466    6714760   11071226
 ```
 
 ### Avec les pourcentages uniquement
@@ -89,29 +109,41 @@ freqm(hdv2003, "activite_", poids = "poids")
 ``` r
 freqm(hdv2003, 'activite_', poids="poids", calc="%")
 #> # A tibble: 7 × 4
-#>   name                    Non   Oui Total
+#>   name                    Oui   Non Total
 #>   <chr>                 <dbl> <dbl> <dbl>
-#> 1 activite_bricol        59.1  40.9   100
-#> 2 activite_cinema        55.5  44.5   100
-#> 3 activite_cuisine       57.4  42.6   100
-#> 4 activite_hard.rock     99.2   0.8   100
-#> 5 activite_lecture.bd    97.5   2.5   100
-#> 6 activite_peche.chasse  87.8  12.2   100
-#> 7 activite_sport         60.7  39.3   100
+#> 1 activite_bricol        40.9  59.1   100
+#> 2 activite_cinema        44.5  55.5   100
+#> 3 activite_cuisine       42.6  57.4   100
+#> 4 activite_hard.rock      0.8  99.2   100
+#> 5 activite_lecture.bd     2.5  97.5   100
+#> 6 activite_peche.chasse  12.2  87.8   100
+#> 7 activite_sport         39.3  60.7   100
 ```
 
 ### En transposée
 
 ``` r
-freqm(hdv2003, 'activite_', poids="poids", calc="%",transpose=T)
-#>   Modalités activite_bricol activite_cinema activite_cuisine activite_hard.rock
-#> 1       Non            59.1            55.5             57.4               99.2
-#> 2       Oui            40.9            44.5             42.6                0.8
-#> 3     Total             100             100              100                100
-#>   activite_lecture.bd activite_peche.chasse activite_sport
-#> 1                97.5                  87.8           60.7
-#> 2                 2.5                  12.2           39.3
-#> 3                 100                   100            100
+freqm(hdv2003, 'activite_', poids="poids", calc="all",transpose=T)
+#>   Modalités activite_bricol % activite_bricol n activite_cinema %
+#> 1       Oui              40.9         4527121.0              44.5
+#> 2       Non              59.1         6544105.0              55.5
+#> 3     Total               100          11071226               100
+#>   activite_cinema n activite_cuisine % activite_cuisine n activite_hard.rock %
+#> 1         4925076.0               42.6          4714376.0                  0.8
+#> 2         6146151.0               57.4          6356851.0                 99.2
+#> 3          11071227                100           11071227                  100
+#>   activite_hard.rock n activite_lecture.bd % activite_lecture.bd n
+#> 1              89264.0                   2.5              274205.0
+#> 2           10981963.0                  97.5            10797021.0
+#> 3             11071227                   100              11071226
+#>   activite_peche.chasse % activite_peche.chasse n activite_sport %
+#> 1                    12.2               1354544.0             39.3
+#> 2                    87.8               9716683.0             60.7
+#> 3                     100                11071227              100
+#>   activite_sport n
+#> 1        4356466.0
+#> 2        6714760.0
+#> 3         11071226
 ```
 
 ### Si la variable n’est pas issue d’une question à choix multiple

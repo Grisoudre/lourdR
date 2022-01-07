@@ -26,18 +26,12 @@ devtools::install_github("Grisoudre/lourdR")
 
 # Exemples
 
-
-```{r setup}
-library(lourdR)
-library(questionr)
-library(dplyr)
-```
-
 ## Données
 
 A partir des données extraites de l'enquête "Histoire de vie", 2003, Insee, et fournies par le package {questionr} :
 
 ```{r}
+library(lourdR)
 data("hdv2003")
 # Renommer les variables cibles avec le préfixe "activite_" :
 index<-match("hard.rock", names(hdv2003)):match("sport", names(hdv2003))
@@ -51,6 +45,14 @@ hdv2003 <- hdv2003 %>%
 ### Fréquences et pourcentages de chacune des variables
 
 ```{r}
+freqm(hdv2003, "activite_")
+```
+
+### En réordonnant les colonnes à l'aide des facteurs
+
+```{r}
+ordre <- c("Oui","Non")
+hdv2003 <- hdv2003 %>% mutate(across(matches("^activite_"), ~factor(., levels = ordre)))
 freqm(hdv2003, "activite_")
 ```
 
@@ -69,7 +71,7 @@ freqm(hdv2003, 'activite_', poids="poids", calc="%")
 ### En transposée
 
 ```{r}
-freqm(hdv2003, 'activite_', poids="poids", calc="%",transpose=T)
+freqm(hdv2003, 'activite_', poids="poids", calc="all",transpose=T)
 ```
 
 
@@ -96,6 +98,8 @@ freqm(hdv2003, 'sexe', poids="poids",  transpose=T)
 ```{r}
 freqp(hdv2003, "sexe", poids="poids")
 ```
+
+
 ### Sans les fréquences
 
 ```{r}

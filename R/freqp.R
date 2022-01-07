@@ -32,7 +32,9 @@ freqp <- function(table,var,
 
 
   if(class(table[,var])=="factor"){
-    tablevar <- droplevels(table[!table[,var]%in%exclude,var])}
+    tablevar <- droplevels(table[!table[,var]%in%exclude,var])}else{
+      tablevar <- table[!table[,var]%in%exclude,var]
+    }
 
 
   u <- freq(tablevar, total=total, valid=F) %>%
