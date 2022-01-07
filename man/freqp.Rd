@@ -9,7 +9,7 @@ freqp(
   table,
   var,
   total = T,
-  exclude = "",
+  exclude = NULL,
   transpose = F,
   poids = NULL,
   verbose = T,

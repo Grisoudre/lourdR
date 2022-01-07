@@ -30,11 +30,19 @@ freqm <- function(table,racine_var,
   liste <- table %>% select(starts_with(racine_var)) %>% names()
   # Démarrer sur t vide :
   t <- NULL
+
   # A. pondéré --------
-  if(is.null(poids)==F){for(i in liste){
-      if(length(unique(table[!table[,i]%in%exclude,i]))<=1){
-        t <- rbind(t,wtd.table(table[!table[,i]%in%exclude,i],
-                               weights = table[!table[,i]%in%exclude,poids], useNA="ifany") %>%
+  if(is.null(poids)==F){
+
+    for(i in liste){
+      if(class(table[,i])=="factor"){
+        vartable <- droplevels(table[!table[,i]%in%exclude,i])
+      }else{
+        vartable <- table[!table[,i]%in%exclude,i]
+      }
+      if(length(unique(vartable))<=1){
+        t <- rbind(t,wtd.table(vartable,
+                               weights = as.numeric(table[!table[,i]%in%exclude,poids]), useNA="ifany") %>%
                      round(0) %>%
                      data.frame() %>%
                      rownames_to_column("cols") %>%
@@ -43,25 +51,30 @@ freqm <- function(table,racine_var,
                      mutate(`%`=round(n/sum(n)*100,1)) %>%
                      bind_rows(summarise_all(., ~if(is.numeric(.)) sum(.) else "Total")) %>%
                      mutate(name=i))
-        }else{
-          t <- rbind(t,
-                       wtd.table(table[!table[,i]%in%exclude,i],
-                                 weights = table[!table[,i]%in%exclude,poids], useNA="ifany") %>%
-                         round(0) %>%
-                         data.frame() %>%
-                         rename("n"="Freq","cols"="Var1") %>%
-                         # rownames_to_column("cols") %>%
-                         mutate(n=as.integer(n)) %>%
-                         mutate(`%`=round(n/sum(n)*100,1)) %>%
-                         bind_rows(summarise_all(., ~if(is.numeric(.)) sum(.) else "Total")) %>%
-                         mutate(name=i))
-          }
+      }else{
+        t <- rbind(t,
+                   wtd.table(vartable,
+                             weights = as.numeric(table[!table[,i]%in%exclude,poids]), useNA="ifany") %>%
+                     round(0) %>%
+                     data.frame() %>%
+                     rename("n"="Freq","cols"="Var1") %>%
+                     # rownames_to_column("cols") %>%
+                     mutate(n=as.integer(n)) %>%
+                     mutate(`%`=round(n/sum(n)*100,1)) %>%
+                     bind_rows(summarise_all(., ~if(is.numeric(.)) sum(.) else "Total")) %>%
+                     mutate(name=i))
+      }
     }
   }else{
     # B. Non-pondéré ----------
     for(i in liste){
+      if(class(table[,i])=="factor"){
+        vartable <- droplevels(table[!table[,i]%in%exclude,i])
+      }else{
+        vartable <- table[!table[,i]%in%exclude,i]
+      }
       t <- rbind(t,
-                 freq(table[!table[,i]%in%exclude,i], total=total) %>%
+                 freq(vartable, total=total) %>%
                    rownames_to_column("cols") %>%
                    mutate(name=i)
       )
@@ -117,7 +130,7 @@ freqm <- function(table,racine_var,
   if(verbose==F){
     return(v)
   }else{
-  print(v, n=nrow(v), na.print="NA")
+    print(v, n=nrow(v), na.print="NA")
   }
 }
 

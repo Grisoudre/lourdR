@@ -24,37 +24,42 @@
 #' @export
 
 freqp <- function(table,var,
-                  total=T, exclude="",
+                  total=T, exclude=NULL,
                   transpose=F,
                   poids = NULL, verbose=T,
                   brut=T, freq=T, pourc=T){
 
 
- u <- freq(table[!table[,var]%in%exclude,var], total=total, valid=F) %>%
+
+  if(class(table[,var])=="factor"){
+    tablevar <- droplevels(table[!table[,var]%in%exclude,var])}
+
+
+  u <- freq(tablevar, total=total, valid=F) %>%
     data.frame() %>%
     rownames_to_column(var) %>%
     rename("Brut Freq"="n","Brut %"="X.")
 
   for (i in poids){
- t<-wtd.table(table[!table[,var]%in%exclude,var],
-            weights = table[!table[,var]%in%exclude,i], useNA="ifany") %>%
-    round(0) %>%
-    data.frame() %>%
-    mutate(`%`=round(Freq/sum(Freq)*100,1)) %>%
-    bind_rows(summarise_all(., ~if(is.numeric(.)) sum(.) else "Total"))
- names(t)[1]<-var
- names(t)[2:3]<-paste(i, names(t)[2:3])
- u <- left_join(u,t,by=var)
+    t<-wtd.table(tablevar,
+                 weights = as.numeric(table[!table[,var]%in%exclude,i]), useNA="ifany") %>%
+      round(0) %>%
+      data.frame() %>%
+      mutate(`%`=round(Freq/sum(Freq)*100,1)) %>%
+      bind_rows(summarise_all(., ~if(is.numeric(.)) sum(.) else "Total"))
+    names(t)[1]<-var
+    names(t)[2:3]<-paste(i, names(t)[2:3])
+    u <- left_join(u,t,by=var)
   }
- if(brut==F){
-   u <- u %>% select(-starts_with("Brut "))
- }
- if(freq==F){
-   u <- u %>% select(-ends_with(" Freq"))
- }
- if(pourc==F){
-   u <- u %>% select(-ends_with(" %"))
- }
+  if(brut==F){
+    u <- u %>% select(-starts_with("Brut "))
+  }
+  if(freq==F){
+    u <- u %>% select(-ends_with(" Freq"))
+  }
+  if(pourc==F){
+    u <- u %>% select(-ends_with(" %"))
+  }
   if(transpose==T){
     u <- u %>%
       t() %>% data.frame(stringsAsFactors = F) %>%
