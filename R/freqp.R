@@ -1,21 +1,26 @@
-# freqp : Présenter dans un même tableau les effectifs bruts,
-# pondérés selon 1 ou + pondérations et %ages pondérés =========
-
-# table = table de données
-# var = variable
-# exclude = Valeur à exclure = c("-NC-",NA), def = NULL
-# poids = variable contenant les poids = "pond_pop", def = NULL
-# brut = Présenter les valeurs sans pondération = F/T , def = T
-# freq = Présenter les valeurs de fréquence = F/T , def = T
-# pourc = Présenter les valeurs de pourcentages = F/T , def = T
-# total = Ajout du total = F/T ; def = T
-# transpose = Présentation en transposée = F/T , def = F
-# verbose = Copie du tableau dans la console quand le résultat est envoyé dans un objet = F/T , def = T
-
+#' Effectifs bruts, pondérés selon 1 ou + poids dans un même tableau
+#'
+#' @param table table de données
+#' @param var variable
+#' @param poids variable(s) contenant les poids
+#' @param total Si F, n'ajoute pas le total
+#' @param exclude vecteur : valeur(s) à exclure ; ex : c("-NC-",NA)
+#' @param transpose Si T, présentation en transposée
+#' @param brut Si F, ne présente pas les valeurs sans pondération
+#' @param freq Si F, ne présente pas les valeurs de fréquence
+#' @param pourc Si F, ne présente pas les valeurs de pourcentages
+#' @param verbose  Si F, ne copie pas le tableau dans la console,
+#'  quand le résultat est envoyé dans un objet par exemple
+#'
+#' @return Un tableau de fréquences et/ou pourcentage
+#'
+#' @encoding UTF-8
+#'
 #' @import dplyr
 #' @import tibble
 #' @import tidyr
 #' @import questionr
+#'
 #' @export
 
 freqp <- function(table,var,

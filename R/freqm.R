@@ -1,18 +1,24 @@
-# freqm() Fonction tris à plats multiples pondérable ---------
-
-# table = table de données
-# racine_var = racine des variables issues de quest. à choix multiple
-# calc = choix du type de calcul : Fréquence et/ou pourcentages = "n", "%", "all"
-# exclude = Valeur à exclure = c("-NC-",NA), def = NULL
-# poids = variable contenant les poids = "pond_pop", def = NULL
-# total = Ajout du total = F/T ; def = T
-# transpose = Présentation en transposée = F/T , def = F
-# verbose = Copie du tableau dans la console quand le résultat est envoyé dans un objet = F/T , def = T
-
+#' Tris à plats multiples pondérable
+#'
+#' @param table table de données
+#' @param racine_var racine des variables issues de quest. à choix multiple
+#' @param calc choix du type de calcul : fréquence et/ou pourcentages = "n", "%", "all"
+#' @param poids variable contenant les poids
+#' @param total Si F, n'ajoute pas le total
+#' @param exclude vecteur : Valeur(s) à exclure ; ex : c("-NC-",NA)
+#' @param transpose Si T, présentation en transposée
+#' @param verbose Si F, ne copie pas le tableau dans la console,
+#'  quand le résultat est envoyé dans un objet par exemple
+#'
+#' @return Un tableau de fréquences et/ou pourcentage
+#'
+#' @encoding UTF-8
+#'
 #' @import dplyr
 #' @import tibble
 #' @import tidyr
 #' @import questionr
+#'
 #' @export
 
 freqm <- function(table,racine_var,
