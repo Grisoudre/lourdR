@@ -1,0 +1,59 @@
+---
+title: "comment-utiliser-mon-package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{comment-utiliser-mon-package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(lourdR)
+library(questionr)
+library(dplyr)
+```
+
+```{r}
+data("hdv2003")
+# Renommer les variables cibles avec le préfixe "activite_" :
+index<-match("hard.rock", names(hdv2003)):match("sport", names(hdv2003))
+hdv2003 <- hdv2003 %>% 
+  rename_at(index,~paste0("activite_",.))
+```
+
+
+
+```{r,eval=F}
+# Fréquences et pourcentages de chacune des variables :
+freqm(hdv2003, "activite_")
+
+# Pondérés :
+freqm(hdv2003, "activite_", poids = "poids")
+
+# Avec les pourcentages uniquement :
+freqm(hdv2003, 'activite_', poids="poids", calc="%")
+
+# En transposée :
+freqm(hdv2003, 'activite_', poids="poids", calc="%",transpose=T)
+
+# Si la variable  n'est pas issue d'une question à choix multiple :
+freqm(hdv2003, 'sexe', poids="poids")
+freqm(hdv2003, 'sexe', poids="poids",  transpose=T)
+freqm(hdv2003, 'sexe', poids="poids", calc="n", transpose=T)
+```
+
+
+
+
+```{r,eval=F}
+
+freqp(hdv2003, "sexe", poids="poids", freq=F)
+```
+

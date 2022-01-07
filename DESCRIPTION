@@ -1,0 +1,20 @@
+Package: lourdR
+Title: Aperçu de données pondérées
+Version: 0.0.0.9000
+Imports: 
+    dplyr,
+    questionr,
+    tibble,
+    tidyr
+Author: Grisoudre
+Maintainer: Grisoudre <cecile.rodrigues@cnrs.fr>
+Description: Fonctions de présentation de tableau sur données pondérées
+License: CC-NC-SA
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr
