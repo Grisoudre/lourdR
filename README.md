@@ -88,6 +88,31 @@ freqm(hdv2003, "activite_")
 #> 14 activite_sport        n     723   1277    2000
 ```
 
+### En réordonnant les colonnes sans facteurs
+
+``` r
+levels <- c("name","calc","Oui","Non","Total")
+freqm(hdv2003, "activite_", verbose=F) %>% 
+  select(all_of(levels))
+#> # A tibble: 14 × 5
+#>    name                  calc    Oui    Non Total
+#>    <chr>                 <chr> <dbl>  <dbl> <dbl>
+#>  1 activite_bricol       %      42.6   57.4   100
+#>  2 activite_bricol       n     853   1147    2000
+#>  3 activite_cinema       %      41.3   58.7   100
+#>  4 activite_cinema       n     826   1174    2000
+#>  5 activite_cuisine      %      44     56     100
+#>  6 activite_cuisine      n     881   1119    2000
+#>  7 activite_hard.rock    %       0.7   99.3   100
+#>  8 activite_hard.rock    n      14   1986    2000
+#>  9 activite_lecture.bd   %       2.4   97.7   100
+#> 10 activite_lecture.bd   n      47   1953    2000
+#> 11 activite_peche.chasse %      11.2   88.8   100
+#> 12 activite_peche.chasse n     224   1776    2000
+#> 13 activite_sport        %      36.1   63.8   100
+#> 14 activite_sport        n     723   1277    2000
+```
+
 ### Pondérés
 
 ``` r

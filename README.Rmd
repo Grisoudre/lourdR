@@ -62,6 +62,13 @@ ordre <- c("Oui","Non")
 hdv2003 <- hdv2003 %>% mutate(across(matches("^activite_"), ~factor(., levels = ordre)))
 freqm(hdv2003, "activite_")
 ```
+### En réordonnant les colonnes sans facteurs
+
+```{r}
+levels <- c("name","calc","Oui","Non","Total")
+freqm(hdv2003, "activite_", verbose=F) %>% 
+  select(all_of(levels))
+```
 
 ### Pondérés
 
