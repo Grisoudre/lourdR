@@ -24,6 +24,13 @@ if (!require("devtools")) install.packages("devtools", dep=T)
 devtools::install_github("Grisoudre/lourdR")
 ```
 
+## Documentation
+
+```{r, eval=F}
+?freqm
+?freqp
+```
+
 # Exemples
 
 ## Données

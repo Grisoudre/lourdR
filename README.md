@@ -14,9 +14,10 @@ Le package contient les fonctions :
 if (!require("devtools")) install.packages("devtools", dep=T)
 devtools::install_github("Grisoudre/lourdR")
 ```
-# Documentation
 
-```r
+## Documentation
+
+``` r
 ?freqm
 ?freqp
 ```
