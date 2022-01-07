@@ -15,8 +15,7 @@
 #' @import dplyr
 #' @import tibble
 #' @import tidyr
-#' @importFrom questionr freq
-#' @importFrom questionr wtd.table
+#' @import questionr
 #' @export
 
 freqp <- function(table,var,

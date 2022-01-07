@@ -12,8 +12,7 @@
 #' @import dplyr
 #' @import tibble
 #' @import tidyr
-#' @importFrom questionr freq
-#' @importFrom questionr wtd.table
+#' @import questionr
 #' @export
 
 freqm <- function(table,racine_var,
