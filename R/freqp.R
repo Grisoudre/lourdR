@@ -7,12 +7,10 @@
 #' @param exclude vecteur : valeur(s) à exclure ; ex : c("-NC-",NA)
 #' @param transpose Si T, présentation en transposée
 #' @param brut Si F, ne présente pas les valeurs sans pondération
-#' @param freq Si F, ne présente pas les valeurs de fréquence
+#' @param n Si F, ne présente pas les valeurs d'effectifs
 #' @param pourc Si F, ne présente pas les valeurs de pourcentages
-#' @param verbose  Si F, ne copie pas le tableau dans la console,
-#'  quand le résultat est envoyé dans un objet par exemple
 #'
-#' @return Un tableau de fréquences et/ou pourcentage
+#' @return Un tableau d'effectifs et/ou pourcentages
 #'
 #' @encoding UTF-8
 #'
@@ -27,7 +25,7 @@ freqp <- function(table,var,
                   total=T, exclude=NULL,
                   transpose=F,
                   poids = NULL, verbose=T,
-                  brut=T, freq=T, pourc=T){
+                  brut=T, n=T, pourc=T){
 
 
 
@@ -56,7 +54,7 @@ freqp <- function(table,var,
   if(brut==F){
     u <- u %>% select(-starts_with("Brut "))
   }
-  if(freq==F){
+  if(n==F){
     u <- u %>% select(-ends_with(" Freq"))
   }
   if(pourc==F){
@@ -70,9 +68,9 @@ freqp <- function(table,var,
     u <- u %>% slice(-(1))
   }
 
-  if(verbose==F){
-    return(u)
-  }else{
-    print(u, n=nrow(u), na.print="NA")
-  }
+  # if(verbose==F){
+    return(data.frame(u))
+  # }else{
+  #   print(data.frame(u), n=nrow(u), na.print="NA")
+  # }
 }

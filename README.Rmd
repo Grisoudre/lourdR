@@ -4,8 +4,7 @@ output: github_document
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>", message=F
+  collapse = TRUE, message=F
 )
 ```
 
@@ -59,14 +58,15 @@ freqm(hdv2003, "activite_")
 
 ```{r}
 ordre <- c("Oui","Non")
-hdv2003 <- hdv2003 %>% mutate(across(matches("^activite_"), ~factor(., levels = ordre)))
+hdv2003 <- hdv2003 %>% mutate(across(matches("^activite_"), 
+                                     ~factor(., levels = ordre)))
 freqm(hdv2003, "activite_")
 ```
 ### En réordonnant les colonnes sans facteurs
 
 ```{r}
 levels <- c("name","calc","Oui","Non","Total")
-freqm(hdv2003, "activite_", verbose=F) %>% 
+freqm(hdv2003, "activite_") %>% 
   select(all_of(levels))
 ```
 
@@ -117,7 +117,7 @@ freqp(hdv2003, "sexe", poids="poids")
 ### Sans les fréquences
 
 ```{r}
-freqp(hdv2003, "sexe", poids="poids", freq=F)
+freqp(hdv2003, "sexe", poids="poids", n=F)
 ```
 
 

@@ -1,16 +1,14 @@
 #' Tris à plats multiples pondérable
 #'
 #' @param table table de données
-#' @param racine_var racine des variables issues de quest. à choix multiple
-#' @param calc choix du type de calcul : fréquence et/ou pourcentages = "n", "%", "all"
+#' @param racine_var racine des variables issues de quest. à choix multiple ; ex : "activite_"
+#' @param calc choix du type de calcul : effectifs et/ou pourcentages = "n", "%", "all"
 #' @param poids variable contenant les poids
 #' @param total Si F, n'ajoute pas le total
 #' @param exclude vecteur : Valeur(s) à exclure ; ex : c("-NC-",NA)
 #' @param transpose Si T, présentation en transposée
-#' @param verbose Si F, ne copie pas le tableau dans la console,
-#'  quand le résultat est envoyé dans un objet par exemple
 #'
-#' @return Un tableau de fréquences et/ou pourcentage
+#' @return Un tableau d'effectifs et/ou pourcentages
 #'
 #' @encoding UTF-8
 #'
@@ -33,13 +31,13 @@ freqm <- function(table,racine_var,
 
   # A. pondéré --------
   if(is.null(poids)==F){
-
     for(i in liste){
       if(class(table[,i])=="factor"){
         vartable <- droplevels(table[!table[,i]%in%exclude,i])
       }else{
         vartable <- table[!table[,i]%in%exclude,i]
       }
+
       if(length(unique(vartable))<=1){
         t <- rbind(t,wtd.table(vartable,
                                weights = as.numeric(table[!table[,i]%in%exclude,poids]), useNA="ifany") %>%
@@ -127,11 +125,11 @@ freqm <- function(table,racine_var,
       slice(-slice) %>%
       rename("Modalités"=1)
   }
-  if(verbose==F){
-    return(v)
-  }else{
-    print(v, n=nrow(v), na.print="NA")
-  }
+  # if(verbose==F){
+    return(data.frame(v))
+  # }else{
+  #   print(data.frame(v), n=nrow(v), na.print="NA", row.names=F)
+  # }
 }
 
 
