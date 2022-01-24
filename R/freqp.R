@@ -38,14 +38,15 @@ freqp <- function(table,var,
   u <- freq(tablevar, total=total, valid=F) %>%
     data.frame() %>%
     rownames_to_column(var) %>%
-    rename("Brut Freq"="n","Brut %"="X.")
+    rename("Brut n"="n","Brut pourc"="X.")
 
   for (i in poids){
     t<-wtd.table(tablevar,
                  weights = as.numeric(table[!table[,var]%in%exclude,i]), useNA="ifany") %>%
       round(0) %>%
       data.frame() %>%
-      mutate(`%`=round(Freq/sum(Freq)*100,1)) %>%
+      mutate(`pourc`=round(Freq/sum(Freq)*100,1)) %>%
+      rename("n"="Freq") %>%
       bind_rows(summarise_all(., ~if(is.numeric(.)) sum(.) else "Total"))
     names(t)[1]<-var
     names(t)[2:3]<-paste(i, names(t)[2:3])
@@ -55,10 +56,10 @@ freqp <- function(table,var,
     u <- u %>% select(-starts_with("Brut "))
   }
   if(n==F){
-    u <- u %>% select(-ends_with(" Freq"))
+    u <- u %>% select(-ends_with(" n"))
   }
   if(pourc==F){
-    u <- u %>% select(-ends_with(" %"))
+    u <- u %>% select(-ends_with(" pourc"))
   }
   if(transpose==T){
     u <- u %>%

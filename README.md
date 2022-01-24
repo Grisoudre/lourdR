@@ -194,18 +194,18 @@ freqm(hdv2003, 'sexe', poids="poids",  transpose=T)
 
 ``` r
 freqp(hdv2003, "sexe", poids="poids")
-##    sexe Brut.Freq Brut.. poids.Freq poids..
-## 1 Homme       899     45    5149382    46.5
-## 2 Femme      1101     55    5921844    53.5
-## 3 Total      2000    100   11071226   100.0
+##    sexe Brut.n Brut.pourc  poids.n poids.pourc
+## 1 Homme    899         45  5149382        46.5
+## 2 Femme   1101         55  5921844        53.5
+## 3 Total   2000        100 11071226       100.0
 ```
 
 ### Sans les fréquences
 
 ``` r
 freqp(hdv2003, "sexe", poids="poids", n=F)
-##    sexe Brut.. poids..
-## 1 Homme     45    46.5
-## 2 Femme     55    53.5
-## 3 Total    100   100.0
+##    sexe Brut.pourc poids.pourc
+## 1 Homme         45        46.5
+## 2 Femme         55        53.5
+## 3 Total        100       100.0
 ```
